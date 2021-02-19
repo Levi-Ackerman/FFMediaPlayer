@@ -84,12 +84,6 @@ int RenderVideoElement::stop() {
         delete videoPad;
         videoPad = 0;
     }
-//
-//    av_freep(&dst_data[0]);
-//    if (sws_ctx) {
-//        sws_freeContext(sws_ctx);
-//        sws_ctx = 0;
-//    }
 
     if (window) {
  //       ANativeWindow_release(window);
