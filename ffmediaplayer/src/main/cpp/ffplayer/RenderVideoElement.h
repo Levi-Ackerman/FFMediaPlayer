@@ -47,9 +47,6 @@ private:
     pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
     ANativeWindow *window = 0;
 
-    uint8_t *dst_data[4];
-    int dst_linesize[4];
-    SwsContext *sws_ctx = 0;
     int width;
     int height;
 };

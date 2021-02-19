@@ -8,7 +8,7 @@
 #include <macro.h>
 #include <FFLog.h>
 #include <cstring>
-#include "BeautyUtil.h"
+#include "RgbaFrame.h"
 
 void *video_render_task_start(void *args) {
     ALOGE("enter: %s", __PRETTY_FUNCTION__);
@@ -35,15 +35,9 @@ int RenderVideoElement::open(PLAYER_PARAMETERS &avContext, notify_callback_f not
     AVCodecContext *codecContext = avContext.videoCodecContext;
     width = codecContext->width;
     height = codecContext->height;
-    sws_ctx = sws_getContext(codecContext->width, codecContext->height,
-                                         codecContext->pix_fmt,
-                                         codecContext->width, codecContext->height, AV_PIX_FMT_RGBA,
-                                         SWS_BILINEAR, NULL, NULL, NULL);
+
 
     ALOGE("codecContext->width %d, codecContext->height %d", codecContext->width, codecContext->height);
-    //给 dst_data dst_linesize 申请内存
-    av_image_alloc(dst_data, dst_linesize,
-                   codecContext->width, codecContext->height, AV_PIX_FMT_RGBA, 1);
     return 0;
 }
 
@@ -91,12 +85,12 @@ int RenderVideoElement::stop() {
         delete videoPad;
         videoPad = 0;
     }
-
-    av_freep(&dst_data[0]);
-    if (sws_ctx) {
-        sws_freeContext(sws_ctx);
-        sws_ctx = 0;
-    }
+//
+//    av_freep(&dst_data[0]);
+//    if (sws_ctx) {
+//        sws_freeContext(sws_ctx);
+//        sws_ctx = 0;
+//    }
 
     if (window) {
  //       ANativeWindow_release(window);
@@ -111,9 +105,6 @@ int RenderVideoElement::release() {
         delete videoPad;
         videoPad = 0;
     }
-
-    av_freep(&dst_data[0]);
-    sws_freeContext(sws_ctx);
 
     return 0;
 }
@@ -154,19 +145,14 @@ void RenderVideoElement::_start() {
             continue;
         }
 
-        AVFrame* frame = (AVFrame *) videoPad->getData();
+        RgbaFrame * frame = (RgbaFrame *) videoPad->getData();
         if (frame == 0) {
     //        ALOGE("RenderVideoElement::_start()  frame is 0");
             av_usleep(10 * 1000);
             continue;
         }
 
-        //取到了yuv原始数据，下面要进行格式转换
-        sws_scale(sws_ctx, frame->data,
-                  frame->linesize, 0, height, dst_data, dst_linesize);
 
-        //lizx3 这里进行了RGBA转换,可以在这里做个美白磨皮的filter
-        skinWhite(dst_data[0], dst_data[0],frame->width, frame->height,4);
 //        ALOGI("frame params: %d,%d,%d, linesizes %d,%d,%d,%d ", frame->width, frame->height, frame->channels, dst_linesize[0],
 //              dst_linesize[1],dst_linesize[2],dst_linesize[3]);
  //       ALOGE("video gettime %lf", avContext->streamTime);
@@ -201,15 +187,15 @@ void RenderVideoElement::_start() {
                     //时间差如果大于0.05，有明显的延迟感
                     //丢包：要操作队列中数据！一定要小心！
 //                    packets.sync();
-                    av_frame_free(&frame);
+                    delete frame;
                     continue;
                 }
             }
         }
 
-        renderFrame(dst_data[0], dst_linesize[0], width, height);
+        renderFrame(frame->dst_data[0], frame->dst_linesize[0], width, height);
 
-        av_frame_free(&frame);
+        delete frame;
         frame = 0;
     }
 }
@@ -228,7 +214,6 @@ int RenderVideoElement::setSurface(ANativeWindow * window) {
     return 0;
 }
 
-//lizx3 查看rgba怎么来的
 //1，data;2，linesize；3，width; 4， height
 void RenderVideoElement::renderFrame(uint8_t *src_data, int src_lineSize, int width, int height) {
     pthread_mutex_lock(&mutex);

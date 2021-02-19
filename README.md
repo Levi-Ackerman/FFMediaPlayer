@@ -1,4 +1,9 @@
 # FFMediaPlayer
+## todo
+美白加速的优化
+入队前美白，提前转换rgba，美白磨皮后再入队，出队后只管渲染的事了
+自建线程池，类似loop这种，for循环作为任务代码输入，避免重复创建和销毁线程
+
 project 采用 Android MediaPlayer生命周期 + Gstreamer pipeline的思想框架来构建.
 - 采用Android MediaPlayer生命周期的原因
   方便上层应用在Android MediaPlayer和project间进行切换, 至于为什么要切换有几方面的考虑:

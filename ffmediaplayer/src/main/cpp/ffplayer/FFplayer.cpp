@@ -13,6 +13,7 @@
 #include "DecodeAudioElement.h"
 #include "SinkFramePad.h"
 #include "SinkPacketPad.h"
+#include "FrameBeautier.h"
 
 /**
  * 准备线程pid_prepare真正执行的函数
@@ -152,7 +153,9 @@ int FFplayer::prepare() {
         }
         renderVideoElement->setSurface(window);
 
-        FFPad* videoRenderPad = new SinkFramePad(PAD_SINK, PAD_VIDEO); //new RenderVideoPad();
+        auto beautier = new FrameBeautier(avContext.videoCodecContext);
+
+        FFPad* videoRenderPad = new SinkFramePad(PAD_SINK, PAD_VIDEO, beautier); //new RenderVideoPad();
         linkPad(renderVideoElement, videoRenderPad);
 
         connectPad(videoDecodeSourcePad, videoRenderPad);  //将decode 和 render建立连接

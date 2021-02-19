@@ -19,7 +19,7 @@ void skinWhite(uint8_t *input, uint8_t *output, int width, int height, int chann
   if (input == NULL || output == NULL) {
     return;
   }
-  TimerClock clock;
+//  TimerClock clock;
   const int size = width * height * channels;
   const int section_length = size / THREAD_NUM;
   for (int i = 0; i < THREAD_NUM; ++i) {
@@ -36,8 +36,7 @@ void skinWhite(uint8_t *input, uint8_t *output, int width, int height, int chann
     futs[i].get();
   }
 
-  auto t = clock.getTimerMilliSec();
-  ALOGI("time cost :%lf", t);
+//  auto t = clock.getTimerMilliSec();
 }
 #endif //FFMEDIAPLAYER_BEAUTYUTIL_H
 }
