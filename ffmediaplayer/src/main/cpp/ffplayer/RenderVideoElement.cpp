@@ -8,7 +8,6 @@
 #include <macro.h>
 #include <FFLog.h>
 #include <cstring>
-#include "RgbaFrame.h"
 
 void *video_render_task_start(void *args) {
     ALOGE("enter: %s", __PRETTY_FUNCTION__);
@@ -145,7 +144,7 @@ void RenderVideoElement::_start() {
             continue;
         }
 
-        RgbaFrame * frame = (RgbaFrame *) videoPad->getData();
+        auto frame = (AVFrame *) videoPad->getData();
         if (frame == 0) {
     //        ALOGE("RenderVideoElement::_start()  frame is 0");
             av_usleep(10 * 1000);
@@ -187,15 +186,15 @@ void RenderVideoElement::_start() {
                     //时间差如果大于0.05，有明显的延迟感
                     //丢包：要操作队列中数据！一定要小心！
 //                    packets.sync();
-                    delete frame;
+                    av_frame_free(&frame);
                     continue;
                 }
             }
         }
 
-        renderFrame(frame->dst_data[0], frame->dst_linesize[0], width, height);
+        renderFrame(frame->data[0], frame->linesize[0], width, height);
 
-        delete frame;
+        av_frame_free(&frame);
         frame = 0;
     }
 }

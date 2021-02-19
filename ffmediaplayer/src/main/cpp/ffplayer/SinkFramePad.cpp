@@ -3,7 +3,6 @@
 //
 #include "SinkFramePad.h"
 #include "FFLog.h"
-#include <RgbaFrame.h>
 
 SinkFramePad::SinkFramePad(pad_type padType, pad_media_type mediaType, FrameBeautier *beautier) : FFPad(padType, mediaType) {
 

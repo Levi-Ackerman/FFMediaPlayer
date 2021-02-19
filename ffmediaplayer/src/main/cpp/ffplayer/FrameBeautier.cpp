@@ -3,6 +3,7 @@
 //
 
 #include "FrameBeautier.h"
+#include "WhiteTable.h"
 
 FrameBeautier::FrameBeautier(AVCodecContext *videoCodecContext) {
 
@@ -23,6 +24,8 @@ void FrameBeautier::beauty(AVFrame *inYUV, AVFrame **outRGB) {
   (*outRGB)->format = AV_PIX_FMT_RGBA;
   av_image_alloc((*outRGB)->data, (*outRGB)->linesize, width, height, AV_PIX_FMT_RGBA, 1);
   sws_scale(sws_ctx, inYUV->data, inYUV->linesize, 0, height, (*outRGB)->data, (*outRGB)->linesize);
-
-  skinWhite((*outRGB)->data[0], (*outRGB)->data[0], width, height, 4);
+  uint8_t *data = (*outRGB)->data[0];
+  for (int i = 0; i < width * height * 4; ++i) {
+    data[i] = WhiteTable::getWhitePixelValue(data[i]);
+  }
 }

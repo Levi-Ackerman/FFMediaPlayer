@@ -11,7 +11,6 @@ extern "C" {
 #include "libswscale/swscale.h"
 
 };
-#include "BeautyUtil.h"
 
 class FrameBeautier {
  private:
