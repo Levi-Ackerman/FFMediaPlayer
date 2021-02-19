@@ -166,7 +166,7 @@ void RenderVideoElement::_start() {
                   frame->linesize, 0, height, dst_data, dst_linesize);
 
         //lizx3 这里进行了RGBA转换,可以在这里做个美白磨皮的filter
-        skinWhite(dst_data[0], dst_data[0],frame->width, frame->height,4);
+        skinWhite(dst_data[0], dst_data[0],frame->width, frame->height,1);
 //        ALOGI("frame params: %d,%d,%d, linesizes %d,%d,%d,%d ", frame->width, frame->height, frame->channels, dst_linesize[0],
 //              dst_linesize[1],dst_linesize[2],dst_linesize[3]);
  //       ALOGE("video gettime %lf", avContext->streamTime);
