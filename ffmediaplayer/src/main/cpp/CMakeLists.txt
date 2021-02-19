@@ -7,7 +7,9 @@ cmake_minimum_required(VERSION 3.4.1)
 
 include_directories(include ./ ffplayer/)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -L${CMAKE_SOURCE_DIR}/../jniLibs/${ANDROID_ABI}")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -L${CMAKE_SOURCE_DIR}/../jniLibs/${ANDROID_ABI} -std=c++11 ")
+
+set(CMAKE_ANDROID_NDK "/Users/bytedance/bytedance/android-ndk-r14b")
 
 file(GLOB src_files *.cpp ffplayer/*.cpp)
 
