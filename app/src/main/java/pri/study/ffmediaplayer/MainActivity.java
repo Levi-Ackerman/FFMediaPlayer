@@ -162,8 +162,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mediaPlayer.release();
                 break;
             case R.id.setDataSource: {
-             //   File file = new File(getExternalFilesDir(null), "test.mp4");
-                File file = new File(Environment.getExternalStorageDirectory() + File.separator + "test.mp4");
+                File file = new File(getExternalFilesDir(null), "test.mp4");
+//                File file = new File(Environment.getExternalStorageDirectory() + File.separator + "test.mp4");
                 String path = file.getAbsolutePath();
                 try {
                     mediaPlayer.setDataSource(path);

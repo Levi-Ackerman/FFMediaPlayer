@@ -409,6 +409,7 @@ jint JNI_OnLoad(JavaVM* vm, void* /* reserved */)
         ALOGE("ERROR: MediaPlayer native registration failed");
         goto bail;
     }
+
     /* success -- return valid version number */
     result = JNI_VERSION_1_4;
 

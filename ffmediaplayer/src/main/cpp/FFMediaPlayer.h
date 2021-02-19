@@ -7,6 +7,7 @@
 
 #include "MediaPlayerListener.h"
 #include "MediaPlayerInterface.h"
+#include "memory"
 
 enum media_player_states {
     MEDIA_PLAYER_STATE_ERROR        = 0,

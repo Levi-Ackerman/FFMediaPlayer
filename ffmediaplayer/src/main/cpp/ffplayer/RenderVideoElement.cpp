@@ -8,6 +8,7 @@
 #include <macro.h>
 #include <FFLog.h>
 #include <cstring>
+#include "BeautyUtil.h"
 
 void *video_render_task_start(void *args) {
     ALOGE("enter: %s", __PRETTY_FUNCTION__);
@@ -164,6 +165,10 @@ void RenderVideoElement::_start() {
         sws_scale(sws_ctx, frame->data,
                   frame->linesize, 0, height, dst_data, dst_linesize);
 
+        //lizx3 这里进行了RGBA转换,可以在这里做个美白磨皮的filter
+        skinWhite(dst_data[0], dst_data[0],frame->width, frame->height,4);
+//        ALOGI("frame params: %d,%d,%d, linesizes %d,%d,%d,%d ", frame->width, frame->height, frame->channels, dst_linesize[0],
+//              dst_linesize[1],dst_linesize[2],dst_linesize[3]);
  //       ALOGE("video gettime %lf", avContext->streamTime);
 
         //extra_delay = repeat_pict / (2*fps)
@@ -223,6 +228,7 @@ int RenderVideoElement::setSurface(ANativeWindow * window) {
     return 0;
 }
 
+//lizx3 查看rgba怎么来的
 //1，data;2，linesize；3，width; 4， height
 void RenderVideoElement::renderFrame(uint8_t *src_data, int src_lineSize, int width, int height) {
     pthread_mutex_lock(&mutex);

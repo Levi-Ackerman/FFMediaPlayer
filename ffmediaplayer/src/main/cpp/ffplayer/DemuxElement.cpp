@@ -98,6 +98,7 @@ int DemuxElement::start() {
     isPlaying = true;
 
     if (elementState == ELEMENT_STATE_STOP) {
+//lizx3 这里看起来是暂停，但是调节进度应该也是会在这里
         int ret = av_seek_frame(avContext->formatContext, -1, 0, AVSEEK_FLAG_BACKWARD);
     }
 

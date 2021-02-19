@@ -7,7 +7,9 @@ cmake_minimum_required(VERSION 3.4.1)
 
 include_directories(include ./ ffplayer/)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -L${CMAKE_SOURCE_DIR}/../jniLibs/${ANDROID_ABI}")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -L${CMAKE_SOURCE_DIR}/../jniLibs/${ANDROID_ABI} -std=c++11 ")
+
+set(CMAKE_ANDROID_NDK "/Users/bytedance/bytedance/android-ndk-r14b")
 
 file(GLOB src_files *.cpp ffplayer/*.cpp)
 
@@ -38,7 +40,7 @@ find_library( # Sets the name of the path variable.
 
         # Specifies the name of the NDK library that
         # you want CMake to locate.
-        log )
+        log)
 
 # Specifies libraries CMake should link to your target library. You
 # can link multiple libraries, such as libraries you define in this
@@ -64,3 +66,11 @@ target_link_libraries( # Specifies the target library.
         # Links the target library to the log library
         # included in the NDK.
         ${log-lib})
+
+#FIND_PACKAGE(OpenMP REQUIRED)
+#if (OPENMP_FOUND)
+#    message("OPENMP FOUND ${OpenMP_CXX_FLAGS}")
+#    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
+#    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+#    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
+#endif ()
